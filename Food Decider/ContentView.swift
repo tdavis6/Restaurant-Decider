@@ -9,12 +9,12 @@ import SwiftUI
 
 var transitionTime:Double = 0.75
 
-var dinnerRestaurants = ["The Stand", "Wahoo's", "BJ's", "Board and Brew", "Moreno's","Chipotle","Shake Shack","Islands","Cheesecake Factory","In N Out","Chick Fil A","Blaze Pizza","Smashburger","MOD Pizza","California Pizza Kitchen","Flame Broiler","Raising Canes","Ruby's Diner","Gramm00's","Manga Bene","Panda Express"]
-var lunchRestaurants = ["The Stand", "Wahoo's", "BJ's", "Board and Brew","Chipotle","Shake Shack","Islands","In N Out","Chick Fil A","Blaze Pizza","Smashburger","MOD Pizza","California Pizza Kitchen","Flame Broiler","Raising Canes","Ruby's Diner"]
-var breakfastRestaurants = ["Bravo Burger", "Corky's","Latte Da","San Juan Hills Country Club","The Original Pancake House"]
+var dinnerRestaurants:Set = ["The Stand", "Wahoo's", "BJ's", "Board and Brew", "Moreno's","Chipotle","Shake Shack","Islands","Cheesecake Factory","In N Out","Chick Fil A","Blaze Pizza","Smashburger","MOD Pizza","California Pizza Kitchen","Flame Broiler","Raising Canes","Ruby's Diner","Gramm00's","Manga Bene","Panda Express"]
+var lunchRestaurants:Set = ["The Stand", "Wahoo's", "BJ's", "Board and Brew","Chipotle","Shake Shack","Islands","In N Out","Chick Fil A","Blaze Pizza","Smashburger","MOD Pizza","California Pizza Kitchen","Flame Broiler","Raising Canes","Ruby's Diner"]
+var breakfastRestaurants:Set = ["Bravo Burger", "Corky's","Latte Da","San Juan Hills Country Club","The Original Pancake House"]
 
 struct ContentView: View {
-    var allRestaurants = breakfastRestaurants + lunchRestaurants + dinnerRestaurants
+    let allRestaurants = dinnerRestaurants.union(lunchRestaurants).union(breakfastRestaurants)
     var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
     
     private var defaultRestaurant:String = "The Stand"
