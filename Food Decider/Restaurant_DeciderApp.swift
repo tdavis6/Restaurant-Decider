@@ -1,6 +1,6 @@
 //
-//  Food_DeciderApp.swift
-//  Food Decider
+//  Restaurant_DeciderApp.swift
+//  Restaurant Decider
 //
 //  Created by Tyler Davis on 4/27/24.
 //
@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct Food_DeciderApp: App {
+struct Restaurant_DeciderApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomePageView()
         }
     }
 }

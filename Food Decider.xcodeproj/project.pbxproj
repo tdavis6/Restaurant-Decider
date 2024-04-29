@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CBDAA6BF2BDDEB3D00A93F6E /* Food_DeciderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDAA6BE2BDDEB3D00A93F6E /* Food_DeciderApp.swift */; };
+		CBDAA6BF2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDAA6BE2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift */; };
 		CBDAA6C12BDDEB3D00A93F6E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDAA6C02BDDEB3D00A93F6E /* ContentView.swift */; };
 		CBDAA6C32BDDEB3E00A93F6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBDAA6C22BDDEB3E00A93F6E /* Assets.xcassets */; };
 		CBDAA6C62BDDEB3E00A93F6E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBDAA6C52BDDEB3E00A93F6E /* Preview Assets.xcassets */; };
@@ -15,7 +15,7 @@
 
 /* Begin PBXFileReference section */
 		CBDAA6BB2BDDEB3D00A93F6E /* Food Decider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Food Decider.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CBDAA6BE2BDDEB3D00A93F6E /* Food_DeciderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Food_DeciderApp.swift; sourceTree = "<group>"; };
+		CBDAA6BE2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant_DeciderApp.swift; sourceTree = "<group>"; };
 		CBDAA6C02BDDEB3D00A93F6E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CBDAA6C22BDDEB3E00A93F6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBDAA6C52BDDEB3E00A93F6E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -51,7 +51,7 @@
 		CBDAA6BD2BDDEB3D00A93F6E /* Food Decider */ = {
 			isa = PBXGroup;
 			children = (
-				CBDAA6BE2BDDEB3D00A93F6E /* Food_DeciderApp.swift */,
+				CBDAA6BE2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift */,
 				CBDAA6C02BDDEB3D00A93F6E /* ContentView.swift */,
 				CBDAA6C22BDDEB3E00A93F6E /* Assets.xcassets */,
 				CBDAA6C42BDDEB3E00A93F6E /* Preview Content */,
@@ -138,7 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBDAA6C12BDDEB3D00A93F6E /* ContentView.swift in Sources */,
-				CBDAA6BF2BDDEB3D00A93F6E /* Food_DeciderApp.swift in Sources */,
+				CBDAA6BF2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,9 +269,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Food Decider/Preview Content\"";
+				DEVELOPMENT_TEAM = QLHMS7XY58;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -283,9 +285,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.tylerdavis.Food-Decider";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -297,9 +300,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Food Decider/Preview Content\"";
+				DEVELOPMENT_TEAM = QLHMS7XY58;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -311,9 +316,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.tylerdavis.Food-Decider";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
