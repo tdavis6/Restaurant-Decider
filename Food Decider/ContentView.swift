@@ -1,50 +1,67 @@
 //
 //  ContentView.swift
-//  Food Decider
+//  Restaurant Decider
 //
 //  Created by Tyler Davis on 4/27/24.
 //
 
 import SwiftUI
+import SwiftData
+
+func getAppVersion() -> String {
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            return appVersion
+        }
+        return "Unknown"
+    }
+
+    func getBuildNumber() -> String {
+        if let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+            return buildNumber
+        }
+        return "Unknown"
+    }
 
 var transitionTime:Double = 0.75
 
-var dinnerRestaurants: [String] = ["The Stand", "Wahoo's", "BJ's", "Board and Brew", "Moreno's","Chipotle","Shake Shack","Islands","Cheesecake Factory","In N Out","Chick Fil A","Blaze Pizza","Smashburger","MOD Pizza","California Pizza Kitchen","Flame Broiler","Raising Canes","Ruby's Diner","Gramm00's","Manga Bene","Panda Express","Bad to the Bone","OC Diner","The Ranch"]
-var lunchRestaurants: [String] = ["The Stand", "Wahoo's", "BJ's", "Board and Brew","Chipotle","Shake Shack","Islands","In N Out","Chick Fil A","Blaze Pizza","Smashburger","MOD Pizza","California Pizza Kitchen","Flame Broiler","Raising Canes","Ruby's Diner","Bad to the Bone"]
-var breakfastRestaurants: [String] = ["Bravo Burger", "Corky's","Latte Da","San Juan Hills Country Club","The Original Pancake House"]
-var customRestaurants: [String] = ["Restaurant 1","Restaurant 2"]
+var dinnerRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
+var lunchRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
+var breakfastRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
+var customRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
 
 let allRestaurants = dinnerRestaurants
 
 var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
 
 struct HomePageView: View {
-    @State private var selected:String = "The Stand"
+    @State private var selected: String = "Choose a button below"
     @State private var id:Int = 0
     @State private var meal:String = "any"
+
+    let allRestaurants = dinnerRestaurants
     
     func randomDinner() {
-        selected = dinnerRestaurants.randomElement() ?? "The Stand"
+        selected = dinnerRestaurants.randomElement() ?? "Choose a button below"
         id += 1
     }
 
     func randomLunch() {
-        selected = lunchRestaurants.randomElement() ?? "The Stand"
+        selected = lunchRestaurants.randomElement() ?? "Choose a button below"
         id += 1
     }
 
     func randomBreakfast() {
-        selected = breakfastRestaurants.randomElement() ?? "The Stand"
-        id += 1
-    }
-
-    func randomAny() {
-        selected = allRestaurants.randomElement() ?? "The Stand"
+        selected = breakfastRestaurants.randomElement() ?? "Choose a button below"
         id += 1
     }
     
     func randomCustom() {
-        selected = customRestaurants.randomElement() ?? "The Stand"
+        selected = customRestaurants.randomElement() ?? "Choose a button below"
+        id += 1
+    }
+    
+    func randomAny() {
+        selected = allRestaurants.randomElement() ?? "Choose a button below"
         id += 1
     }
     
@@ -55,17 +72,33 @@ struct HomePageView: View {
                     .font(.largeTitle.bold())
                 Spacer()
                 VStack{
-                    Circle()
-                        .fill(colors.randomElement() ?? .blue)
-                        .padding()
-                        .overlay(
-                            Image(systemName: "fork.knife.circle.fill"))
-                        .font(.system(size: 250))
-                        .foregroundColor(.white)
+                    AsyncImage(url: URL(string: "N/A")) { phase in
+                                switch phase {
+                                case .failure:
+                                    Image(systemName: "fork.knife")
+                                        .font(.system(size: 250))
+                                        .foregroundColor(colors.randomElement() ?? .blue)
+                                case .success(let image):
+                                    ZStack{
+                                        image
+                                            .resizable()
+                                        Rectangle()
+                                            .foregroundColor(.clear)
+                                            .background(
+                                                LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .bottom, endPoint: .center)
+                                            )
+                                    }
+                                default:
+                                    ProgressView()
+                                }
+                            }
+                    .frame(width: 320, height: 320)
+                    .clipShape(.circle)
+                    .padding()
                     Text("\(selected)!")
                         .font(.title)
                 }
-                .transition(.slide)
+                .transition(.scale.combined(with: .blurReplace))
                 .id(id)
                 HStack{
                     Button("Directions") {
@@ -82,37 +115,32 @@ struct HomePageView: View {
                 HStack{
                     Button("Breakfast") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
-                            meal = "breakfast"
                             randomBreakfast()
                         }
                     }
                     .buttonStyle(.borderedProminent)
                     Button("Lunch") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
-                            meal = "lunch"
                             randomLunch()
                         }
                     }
                     .buttonStyle(.borderedProminent)
                     Button("Dinner") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
-                            meal = "dinner"
                             randomDinner()
                         }
                     }
                     .buttonStyle(.borderedProminent)
                     Button("Any") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
-                            meal = "any"
                             randomAny()
                         }
                     }
                     .buttonStyle(.borderedProminent)
                 }
-                if customRestaurants .contains("The Stand") {
+                if !customRestaurants.isEmpty {
                     Button("Custom List") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
-                            meal = "custom"
                             randomCustom()
                         }
                     }
@@ -120,18 +148,27 @@ struct HomePageView: View {
                 }
                 Spacer()
                 NavigationLink(destination: {
-                    EditListsView()
+                    editListsView()
                 }, label: {
                     Text("Edit Lists")
                 })
                 .buttonStyle(.bordered)
                 .padding()
+                
+                NavigationLink(destination: {
+                    aboutView()
+                }, label: {
+                    Text("About")
+                })
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(0)
             }
         }
     }
 }
 
-struct EditListsView: View {
+struct editListsView: View {
     var body: some View{
         NavigationStack {
             List {
@@ -156,7 +193,7 @@ struct EditListsView: View {
                             breakfastRestaurants.remove(atOffsets: indexSet)
                         })
                         .onMove(perform: { indices, newOffset in
-                            customRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                            breakfastRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
                     }
                 Section(
@@ -168,7 +205,7 @@ struct EditListsView: View {
                             lunchRestaurants.remove(atOffsets: indexSet)
                         })
                         .onMove(perform: { indices, newOffset in
-                            customRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                            lunchRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
                     }
                 Section(
@@ -179,9 +216,8 @@ struct EditListsView: View {
                         .onDelete(perform: { indexSet in
                             dinnerRestaurants.remove(atOffsets: indexSet)
                         })
-                        
                         .onMove(perform: { indices, newOffset in
-                            customRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                            dinnerRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
                     }
             }
@@ -193,6 +229,24 @@ struct EditListsView: View {
     }
 }
 
+struct aboutView: View {
+    var body: some View{
+        NavigationStack{
+            Text("App Version: v\(getAppVersion())")
+            Text("Build Number: \(getBuildNumber())")
+                .padding()
+            Text("[Report an Issue](https://github.com/tdavis6/Restaurant-Decider/issues/new?assignees=tdavis6&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D)")
+            Text("[GitHub Repository](https://github.com/tdavis6/Restaurant-Decider)")
+                .padding()
+            Text("This application is licensed under the MIT License, found [here](https://github.com/tdavis6/Restaurant-Decider/blob/main/LICENSE).")
+                .padding()
+            Text("The app icon contains an icon from Material Design Icons, licensed under the Apache License 2.0, found [here](https://github.com/material-components/material-components/blob/develop/LICENSE).")
+                .padding()
+            Text("The restaurant icon that appears when the internet photo fails to resolve contains an icon from Apple's SF Symbols, licensing found [here](https://developer.apple.com/support/terms/).")
+                .padding()
+        }
+    }
+}
 #Preview {
     HomePageView()
 }
