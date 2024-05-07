@@ -24,44 +24,46 @@ func getAppVersion() -> String {
 
 var transitionTime:Double = 0.75
 
-var dinnerRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
-var lunchRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
-var breakfastRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
-var customRestaurants = ["Restaurant 1","Restaurant 2", "Restaurant 3"]
+struct restaurant: Identifiable {
+    var id = UUID()
+    var name: String = "Restaurant Name"
+}
 
-let allRestaurants = dinnerRestaurants
+var dinnerRestaurants = [restaurant(name: String())]
+var lunchRestaurants = [restaurant(name: String())]
+var breakfastRestaurants = [restaurant(name: String())]
+var customRestaurants = [restaurant(name: String())]
 
 var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
 
 struct HomePageView: View {
-    @State private var selected: String = "Choose a button below"
-    @State private var id:Int = 0
-    @State private var meal:String = "any"
+    @State var selected: restaurant = restaurant(name:"Choose a button below")
+    @State var id:Int = 0
 
-    let allRestaurants = dinnerRestaurants
+    @State var allRestaurants = dinnerRestaurants
     
     func randomDinner() {
-        selected = dinnerRestaurants.randomElement() ?? "Choose a button below"
+        selected = dinnerRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
         id += 1
     }
 
     func randomLunch() {
-        selected = lunchRestaurants.randomElement() ?? "Choose a button below"
+        selected = lunchRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
         id += 1
     }
 
     func randomBreakfast() {
-        selected = breakfastRestaurants.randomElement() ?? "Choose a button below"
+        selected = breakfastRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
         id += 1
     }
     
     func randomCustom() {
-        selected = customRestaurants.randomElement() ?? "Choose a button below"
+        selected = customRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
         id += 1
     }
     
     func randomAny() {
-        selected = allRestaurants.randomElement() ?? "Choose a button below"
+        selected = allRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
         id += 1
     }
     
@@ -85,7 +87,10 @@ struct HomePageView: View {
                                         Rectangle()
                                             .foregroundColor(.clear)
                                             .background(
-                                                LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .bottom, endPoint: .center)
+                                                LinearGradient(stops: [
+                                                    Gradient.Stop(color: .clear, location: 0.4),
+                                                    Gradient.Stop(color: .black, location: 0.0),
+                                                ], startPoint: .bottom, endPoint: .top)
                                             )
                                     }
                                 default:
@@ -95,7 +100,7 @@ struct HomePageView: View {
                     .frame(width: 320, height: 320)
                     .clipShape(.circle)
                     .padding()
-                    Text("\(selected)!")
+                    Text("\(selected.name)!")
                         .font(.title)
                 }
                 .transition(.scale.combined(with: .blurReplace))
@@ -113,30 +118,38 @@ struct HomePageView: View {
                 }
                 Spacer()
                 HStack{
-                    Button("Breakfast") {
-                        withAnimation(.easeInOut(duration: transitionTime)) {
-                            randomBreakfast()
+                    if !breakfastRestaurants.isEmpty {
+                        Button("Breakfast") {
+                            withAnimation(.easeInOut(duration: transitionTime)) {
+                                randomBreakfast()
+                            }
                         }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
-                    Button("Lunch") {
-                        withAnimation(.easeInOut(duration: transitionTime)) {
-                            randomLunch()
+                    if !breakfastRestaurants.isEmpty {
+                        Button("Lunch") {
+                            withAnimation(.easeInOut(duration: transitionTime)) {
+                                randomLunch()
+                            }
                         }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
-                    Button("Dinner") {
-                        withAnimation(.easeInOut(duration: transitionTime)) {
-                            randomDinner()
+                    if !dinnerRestaurants.isEmpty {
+                        Button("Dinner") {
+                            withAnimation(.easeInOut(duration: transitionTime)) {
+                                randomDinner()
+                            }
                         }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
-                    Button("Any") {
-                        withAnimation(.easeInOut(duration: transitionTime)) {
-                            randomAny()
+                    if !allRestaurants.isEmpty {
+                        Button("Any") {
+                            withAnimation(.easeInOut(duration: transitionTime)) {
+                                randomAny()
+                            }
                         }
+                        .buttonStyle(.borderedProminent)
                     }
-                    .buttonStyle(.borderedProminent)
                 }
                 if !customRestaurants.isEmpty {
                     Button("Custom List") {
@@ -169,13 +182,18 @@ struct HomePageView: View {
 }
 
 struct editListsView: View {
+    struct restaurantList: View {
+        var body: some View {
+            Text("Task data goes here")
+        }
+    }
     var body: some View{
         NavigationStack {
             List {
                 Section(
-                    header: Text("Custom List")) {
-                        ForEach(customRestaurants, id: \.self) {restaurant in
-                            Text(restaurant.capitalized)
+                    header: Text("Custom Restaurants")) {
+                        ForEach(customRestaurants, id: \.name) {restaurant in
+                            Text(restaurant.name.capitalized)
                         }
                         .onDelete(perform: { indexSet in
                             customRestaurants.remove(atOffsets: indexSet)
@@ -184,34 +202,11 @@ struct editListsView: View {
                             customRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
                     }
-                Section(
-                    header: Text("Breakfast Restaurants")) {
-                        ForEach(breakfastRestaurants, id: \.self) {restaurant in
-                            Text(restaurant.capitalized)
-                        }
-                        .onDelete(perform: { indexSet in
-                            breakfastRestaurants.remove(atOffsets: indexSet)
-                        })
-                        .onMove(perform: { indices, newOffset in
-                            breakfastRestaurants.move(fromOffsets: indices, toOffset: newOffset)
-                        })
-                    }
-                Section(
-                    header: Text("Lunch Restaurants")) {
-                        ForEach(lunchRestaurants, id: \.self) {restaurant in
-                            Text(restaurant.capitalized)
-                        }
-                        .onDelete(perform: { indexSet in
-                            lunchRestaurants.remove(atOffsets: indexSet)
-                        })
-                        .onMove(perform: { indices, newOffset in
-                            lunchRestaurants.move(fromOffsets: indices, toOffset: newOffset)
-                        })
-                    }
+                    .headerProminence(.increased)
                 Section(
                     header: Text("Dinner Restaurants")) {
-                        ForEach(dinnerRestaurants, id: \.self) {restaurant in
-                            Text(restaurant.capitalized)
+                        ForEach(dinnerRestaurants, id: \.name) {restaurant in
+                            Text(restaurant.name.capitalized)
                         }
                         .onDelete(perform: { indexSet in
                             dinnerRestaurants.remove(atOffsets: indexSet)
@@ -220,6 +215,33 @@ struct editListsView: View {
                             dinnerRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
                     }
+                    .headerProminence(.increased)
+                Section(
+                    header: Text("Lunch Restaurants")) {
+                        ForEach(lunchRestaurants, id: \.name) {restaurant in
+                            Text(restaurant.name.capitalized)
+                        }
+                        .onDelete(perform: { indexSet in
+                            lunchRestaurants.remove(atOffsets: indexSet)
+                        })
+                        .onMove(perform: { indices, newOffset in
+                            lunchRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                        })
+                    }
+                    .headerProminence(.increased)
+                Section(
+                    header: Text("Breakfast Restaurants")) {
+                        ForEach(breakfastRestaurants, id: \.name) {restaurant in
+                            Text(restaurant.name.capitalized)
+                        }
+                        .onDelete(perform: { indexSet in
+                            breakfastRestaurants.remove(atOffsets: indexSet)
+                        })
+                        .onMove(perform: { indices, newOffset in
+                            breakfastRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                        })
+                    }
+                    .headerProminence(.increased)
             }
         }
         .toolbar {
@@ -229,6 +251,7 @@ struct editListsView: View {
     }
 }
 
+
 struct aboutView: View {
     var body: some View{
         NavigationStack{
@@ -236,6 +259,9 @@ struct aboutView: View {
             Text("Build Number: \(getBuildNumber())")
                 .padding()
             Text("[Report an Issue](https://github.com/tdavis6/Restaurant-Decider/issues/new?assignees=tdavis6&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D)")
+                .padding(.top)
+            Text("[Request a Feature](https://github.com/tdavis6/Restaurant-Decider/issues/new?assignees=tdavis6&labels=enhancement&projects=&template=feature_request.md&title=%5BFEATURE%5D)")
+                .padding()
             Text("[GitHub Repository](https://github.com/tdavis6/Restaurant-Decider)")
                 .padding()
             Text("This application is licensed under the MIT License, found [here](https://github.com/tdavis6/Restaurant-Decider/blob/main/LICENSE).")
