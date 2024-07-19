@@ -29,18 +29,17 @@ struct restaurant: Identifiable {
     var name: String = "Restaurant Name"
 }
 
-var dinnerRestaurants = [restaurant(name: String())]
-var lunchRestaurants = [restaurant(name: String())]
-var breakfastRestaurants = [restaurant(name: String())]
-var customRestaurants = [restaurant(name: String())]
-
 var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
 
 struct HomePageView: View {
+    @State public var dinnerRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
+    @State public var lunchRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
+    @State public var breakfastRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
+    @State public var customRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
     @State var selected: restaurant = restaurant(name:"Choose a button below")
     @State var id:Int = 0
 
-    @State var allRestaurants = dinnerRestaurants
+    @State var allRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
     
     func randomDinner() {
         selected = dinnerRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
@@ -126,7 +125,7 @@ struct HomePageView: View {
                         }
                         .buttonStyle(.borderedProminent)
                     }
-                    if !breakfastRestaurants.isEmpty {
+                    if !lunchRestaurants.isEmpty {
                         Button("Lunch") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomLunch()
@@ -161,7 +160,7 @@ struct HomePageView: View {
                 }
                 Spacer()
                 NavigationLink(destination: {
-                    editListsView()
+                    editListsView(customRestaurants: self.$customRestaurants, dinnerRestaurants: self.$dinnerRestaurants, lunchRestaurants: self.$lunchRestaurants, breakfastRestaurants: self.$breakfastRestaurants, textInput: "")
                 }, label: {
                     Text("Edit Lists")
                 })
@@ -182,38 +181,46 @@ struct HomePageView: View {
 }
 
 struct editListsView: View {
-    struct restaurantList: View {
-        var body: some View {
-            Text("Task data goes here")
-        }
-    }
+    @Binding var customRestaurants: [restaurant]
+    @Binding var dinnerRestaurants: [restaurant]
+    @Binding var lunchRestaurants: [restaurant]
+    @Binding var breakfastRestaurants: [restaurant]
+    @State private var showingBreakfastPopover = false
+    @State private var showingLunchPopover = false
+    @State private var showingDinnerPopover = false
+    @State private var showingCustomPopover = false
+    @State var textInput:String
+    
     var body: some View{
         NavigationStack {
             List {
                 Section(
-                    header: Text("Custom Restaurants")) {
-                        ForEach(customRestaurants, id: \.name) {restaurant in
+                    header: Text("Breakfast Restaurants")) {
+                        ForEach(breakfastRestaurants, id: \.name) {restaurant in
                             Text(restaurant.name.capitalized)
                         }
                         .onDelete(perform: { indexSet in
-                            customRestaurants.remove(atOffsets: indexSet)
+                            breakfastRestaurants.remove(atOffsets: indexSet)
                         })
                         .onMove(perform: { indices, newOffset in
-                            customRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                            breakfastRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
-                    }
-                    .headerProminence(.increased)
-                Section(
-                    header: Text("Dinner Restaurants")) {
-                        ForEach(dinnerRestaurants, id: \.name) {restaurant in
-                            Text(restaurant.name.capitalized)
+                        Button("Add a restaurant") {
+                                showingBreakfastPopover = true
                         }
-                        .onDelete(perform: { indexSet in
-                            dinnerRestaurants.remove(atOffsets: indexSet)
-                        })
-                        .onMove(perform: { indices, newOffset in
-                            dinnerRestaurants.move(fromOffsets: indices, toOffset: newOffset)
-                        })
+                            .popover(isPresented: $showingBreakfastPopover) {
+                                Form {
+                                    TextField(
+                                      "Restaurant name",
+                                      text: $textInput,
+                                      onCommit: {
+                                          breakfastRestaurants.append(restaurant(name:textInput))
+                                          showingBreakfastPopover = false
+                                          textInput = ""
+                                      }
+                                    ).padding()
+                                }
+                            }
                     }
                     .headerProminence(.increased)
                 Section(
@@ -227,30 +234,90 @@ struct editListsView: View {
                         .onMove(perform: { indices, newOffset in
                             lunchRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
+                        Button("Add a restaurant") {
+                                showingLunchPopover = true
+                        }
+                            .popover(isPresented: $showingLunchPopover) {
+                                Form {
+                                    TextField(
+                                      "Restaurant name",
+                                      text: $textInput,
+                                      onCommit: {
+                                          lunchRestaurants.append(restaurant(name:textInput))
+                                          showingLunchPopover = false
+                                          textInput = ""
+                                      }
+                                    ).padding()
+                                }
+                            }
                     }
                     .headerProminence(.increased)
                 Section(
-                    header: Text("Breakfast Restaurants")) {
-                        ForEach(breakfastRestaurants, id: \.name) {restaurant in
+                    header: Text("Dinner Restaurants")) {
+                        ForEach(dinnerRestaurants, id: \.name) {restaurant in
                             Text(restaurant.name.capitalized)
                         }
                         .onDelete(perform: { indexSet in
-                            breakfastRestaurants.remove(atOffsets: indexSet)
+                            dinnerRestaurants.remove(atOffsets: indexSet)
                         })
                         .onMove(perform: { indices, newOffset in
-                            breakfastRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                            dinnerRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
+                        Button("Add a restaurant") {
+                                showingDinnerPopover = true
+                        }
+                            .popover(isPresented: $showingDinnerPopover) {
+                                Form {
+                                    TextField(
+                                      "Restaurant name",
+                                      text: $textInput,
+                                      onCommit: {
+                                          dinnerRestaurants.append(restaurant(name:textInput))
+                                          showingDinnerPopover = false
+                                          textInput = ""
+                                      }
+                                    ).padding()
+                                }
+                            }
+                    }
+                    .headerProminence(.increased)
+                Section(
+                    header: Text("Custom Restaurants")) {
+                        ForEach(customRestaurants, id: \.name) {restaurant in
+                            Text(restaurant.name.capitalized)
+                        }
+                        .onDelete(perform: { indexSet in
+                            customRestaurants.remove(atOffsets: indexSet)
+                        })
+                        .onMove(perform: { indices, newOffset in
+                            customRestaurants.move(fromOffsets: indices, toOffset: newOffset)
+                        })
+                        Button("Add a restaurant") {
+                                showingCustomPopover = true
+                        }
+                            .popover(isPresented: $showingCustomPopover) {
+                                Form {
+                                    TextField(
+                                      "Restaurant name",
+                                      text: $textInput,
+                                      onCommit: {
+                                          customRestaurants.append(restaurant(name:textInput))
+                                          showingCustomPopover = false
+                                          textInput = ""
+                                      }
+                                    ).padding()
+                                }
+                            }
                     }
                     .headerProminence(.increased)
             }
         }
         .toolbar {
-                    EditButton()
+            EditButton()
                 }
         .navigationTitle("List Editor")
     }
 }
-
 
 struct aboutView: View {
     var body: some View{
