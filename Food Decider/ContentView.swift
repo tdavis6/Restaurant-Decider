@@ -15,7 +15,7 @@ func getAppVersion() -> String {
         return "Unknown"
     }
 
-    func getBuildNumber() -> String {
+func getBuildNumber() -> String {
         if let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
             return buildNumber
         }
@@ -32,14 +32,14 @@ struct restaurant: Identifiable {
 var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
 
 struct HomePageView: View {
-    @State public var dinnerRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
-    @State public var lunchRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
-    @State public var breakfastRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
-    @State public var customRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
+    @State public var dinnerRestaurants: [restaurant] = []
+    @State public var lunchRestaurants: [restaurant] = []
+    @State public var breakfastRestaurants: [restaurant] = []
+    @State public var customRestaurants: [restaurant] = []
     @State var selected: restaurant = restaurant(name:"Choose a button below")
     @State var id:Int = 0
 
-    @State var allRestaurants: [restaurant] = [restaurant(name:"Restaurant 1"), restaurant(name:"Restaurant 2"), restaurant(name:"Restaurant 3")]
+    @State var allRestaurants: [restaurant] = []
     
     func randomDinner() {
         selected = dinnerRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
@@ -107,7 +107,7 @@ struct HomePageView: View {
                 HStack{
                     Button("Directions") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
-                            let url = URL(string: "maps://?q=\(selected)")
+                            let url = URL(string: "maps://?q=\(selected.name)")
                             if UIApplication.shared.canOpenURL(url!) {
                                 UIApplication.shared.open(url!, options: [:], completionHandler: nil)
                             }
