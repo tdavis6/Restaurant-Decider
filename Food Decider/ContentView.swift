@@ -41,6 +41,23 @@ struct HomePageView: View {
 
     @State var allRestaurants: [restaurant] = []
     
+    func combineArrays() {
+        allRestaurants = []
+        
+        if !dinnerRestaurants.isEmpty {
+            allRestaurants = allRestaurants + dinnerRestaurants
+        }
+        if !lunchRestaurants.isEmpty {
+            allRestaurants = allRestaurants + lunchRestaurants
+        }
+        if !breakfastRestaurants.isEmpty {
+            allRestaurants = allRestaurants + breakfastRestaurants
+        }
+        if !customRestaurants.isEmpty {
+            allRestaurants = allRestaurants + customRestaurants
+        }
+    }
+    
     func randomDinner() {
         selected = dinnerRestaurants.randomElement() ?? restaurant(name: "Choose a button below")
         id += 1
@@ -121,30 +138,34 @@ struct HomePageView: View {
                         Button("Breakfast") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomBreakfast()
+                                combineArrays()
                             }
-                        }
+                        }.onAppear(perform: combineArrays)
                         .buttonStyle(.borderedProminent)
                     }
                     if !lunchRestaurants.isEmpty {
                         Button("Lunch") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomLunch()
+                                combineArrays()
                             }
-                        }
+                        }.onAppear(perform: combineArrays)
                         .buttonStyle(.borderedProminent)
                     }
                     if !dinnerRestaurants.isEmpty {
                         Button("Dinner") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomDinner()
+                                combineArrays()
                             }
-                        }
+                        }.onAppear(perform: combineArrays)
                         .buttonStyle(.borderedProminent)
                     }
                     if !allRestaurants.isEmpty {
                         Button("Any") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomAny()
+                                combineArrays()
                             }
                         }
                         .buttonStyle(.borderedProminent)
@@ -154,8 +175,9 @@ struct HomePageView: View {
                     Button("Custom List") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
                             randomCustom()
+                            combineArrays()
                         }
-                    }
+                    }.onAppear(perform: combineArrays)
                     .buttonStyle(.borderedProminent)
                 }
                 Spacer()
