@@ -13,7 +13,7 @@ func getAppVersion() -> String {
             return appVersion
         }
         return "Unknown"
-    }
+    }   
 
 func getBuildNumber() -> String {
         if let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
@@ -24,10 +24,12 @@ func getBuildNumber() -> String {
 
 var transitionTime:Double = 0.75
 
-struct restaurant: Identifiable {
+struct restaurant: Identifiable, Codable {
     var id = UUID()
     var name: String = "Restaurant Name"
 }
+
+
 
 var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
 
@@ -87,7 +89,7 @@ struct HomePageView: View {
         NavigationStack{
             VStack{
                 Text("Why not try…")
-                    .font(.largeTitle.bold())
+                    .font(.largeTitle.bold()).onAppear(perform:combineArrays)
                 Spacer()
                 VStack{
                     AsyncImage(url: URL(string: "N/A")) { phase in
@@ -138,7 +140,6 @@ struct HomePageView: View {
                         Button("Breakfast") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomBreakfast()
-                                combineArrays()
                             }
                         }.onAppear(perform: combineArrays)
                         .buttonStyle(.borderedProminent)
@@ -147,7 +148,6 @@ struct HomePageView: View {
                         Button("Lunch") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomLunch()
-                                combineArrays()
                             }
                         }.onAppear(perform: combineArrays)
                         .buttonStyle(.borderedProminent)
@@ -156,7 +156,6 @@ struct HomePageView: View {
                         Button("Dinner") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomDinner()
-                                combineArrays()
                             }
                         }.onAppear(perform: combineArrays)
                         .buttonStyle(.borderedProminent)
@@ -165,7 +164,6 @@ struct HomePageView: View {
                         Button("Any") {
                             withAnimation(.easeInOut(duration: transitionTime)) {
                                 randomAny()
-                                combineArrays()
                             }
                         }
                         .buttonStyle(.borderedProminent)
@@ -175,9 +173,8 @@ struct HomePageView: View {
                     Button("Custom List") {
                         withAnimation(.easeInOut(duration: transitionTime)) {
                             randomCustom()
-                            combineArrays()
                         }
-                    }.onAppear(perform: combineArrays)
+                    }
                     .buttonStyle(.borderedProminent)
                 }
                 Spacer()
@@ -211,7 +208,12 @@ struct editListsView: View {
     @State private var showingLunchPopover = false
     @State private var showingDinnerPopover = false
     @State private var showingCustomPopover = false
+    @State var editMode: EditMode = .inactive
     @State var textInput:String
+    enum FocusedField {
+        case textInput
+    }
+    @FocusState private var focusedField: FocusedField?
     
     var body: some View{
         NavigationStack {
@@ -227,11 +229,12 @@ struct editListsView: View {
                         .onMove(perform: { indices, newOffset in
                             breakfastRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
-                        Button("Add a restaurant") {
+                        if editMode.isEditing {
+                            Button("Add new restaurant") {
                                 showingBreakfastPopover = true
-                        }
-                            .popover(isPresented: $showingBreakfastPopover) {
+                            }.popover(isPresented: $showingBreakfastPopover) {
                                 Form {
+                                    Text("Enter the Restaurant Name").font(.headline)
                                     TextField(
                                       "Restaurant name",
                                       text: $textInput,
@@ -240,9 +243,14 @@ struct editListsView: View {
                                           showingBreakfastPopover = false
                                           textInput = ""
                                       }
-                                    ).padding()
+                                    ).keyboardType(.default).autocorrectionDisabled()
+                                        .focused($focusedField, equals: .textInput)
+                                        .listRowSeparator(.hidden)
+                                    }.onAppear {
+                                        focusedField = .textInput
                                 }
                             }
+                    }
                     }
                     .headerProminence(.increased)
                 Section(
@@ -256,22 +264,28 @@ struct editListsView: View {
                         .onMove(perform: { indices, newOffset in
                             lunchRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
-                        Button("Add a restaurant") {
-                                showingLunchPopover = true
-                        }
-                            .popover(isPresented: $showingLunchPopover) {
-                                Form {
-                                    TextField(
-                                      "Restaurant name",
-                                      text: $textInput,
-                                      onCommit: {
-                                          lunchRestaurants.append(restaurant(name:textInput))
-                                          showingLunchPopover = false
-                                          textInput = ""
-                                      }
-                                    ).padding()
-                                }
+                        if editMode.isEditing {
+                            Button("Add new restaurant") {
+                            showingLunchPopover = true
+                        }.popover(isPresented: $showingLunchPopover) {
+                            Form {
+                                Text("Enter the Restaurant Name").font(.headline)
+                                TextField(
+                                  "Restaurant name",
+                                  text: $textInput,
+                                  onCommit: {
+                                      lunchRestaurants.append(restaurant(name:textInput))
+                                      showingLunchPopover = false
+                                      textInput = ""
+                                  }
+                                ).keyboardType(.default).autocorrectionDisabled()
+                                    .focused($focusedField, equals: .textInput)
+                                    .listRowSeparator(.hidden)
+                                }.onAppear {
+                                    focusedField = .textInput
                             }
+                        }
+                    }
                     }
                     .headerProminence(.increased)
                 Section(
@@ -285,22 +299,28 @@ struct editListsView: View {
                         .onMove(perform: { indices, newOffset in
                             dinnerRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
-                        Button("Add a restaurant") {
-                                showingDinnerPopover = true
-                        }
-                            .popover(isPresented: $showingDinnerPopover) {
-                                Form {
-                                    TextField(
-                                      "Restaurant name",
-                                      text: $textInput,
-                                      onCommit: {
-                                          dinnerRestaurants.append(restaurant(name:textInput))
-                                          showingDinnerPopover = false
-                                          textInput = ""
-                                      }
-                                    ).padding()
-                                }
+                        if editMode.isEditing {
+                            Button("Add new restaurant") {
+                            showingDinnerPopover = true
+                        }.popover(isPresented: $showingDinnerPopover) {
+                            Form {
+                                Text("Enter the Restaurant Name").font(.headline)
+                                TextField(
+                                  "Restaurant name",
+                                  text: $textInput,
+                                  onCommit: {
+                                      dinnerRestaurants.append(restaurant(name:textInput))
+                                      showingDinnerPopover = false
+                                      textInput = ""
+                                  }
+                                ).keyboardType(.default).autocorrectionDisabled()
+                                    .focused($focusedField, equals: .textInput)
+                                    .listRowSeparator(.hidden)
+                                }.onAppear {
+                                    focusedField = .textInput
                             }
+                        }
+                    }
                     }
                     .headerProminence(.increased)
                 Section(
@@ -314,29 +334,35 @@ struct editListsView: View {
                         .onMove(perform: { indices, newOffset in
                             customRestaurants.move(fromOffsets: indices, toOffset: newOffset)
                         })
-                        Button("Add a restaurant") {
+                        if editMode.isEditing {
+                            Button("Add new restaurant") {
                                 showingCustomPopover = true
-                        }
-                            .popover(isPresented: $showingCustomPopover) {
-                                Form {
-                                    TextField(
-                                      "Restaurant name",
-                                      text: $textInput,
-                                      onCommit: {
-                                          customRestaurants.append(restaurant(name:textInput))
-                                          showingCustomPopover = false
-                                          textInput = ""
-                                      }
-                                    ).padding()
+                        }.popover(isPresented: $showingCustomPopover) {
+                            Form {
+                                Text("Enter the Restaurant Name").font(.headline)
+                                TextField(
+                                  "Restaurant name",
+                                  text: $textInput,
+                                  onCommit: {
+                                      customRestaurants.append(restaurant(name:textInput))
+                                      showingCustomPopover = false
+                                      textInput = ""
+                                  }
+                                ).keyboardType(.default).autocorrectionDisabled()
+                                    .focused($focusedField, equals: .textInput)
+                                    .listRowSeparator(.hidden)
+                                }.onAppear {
+                                    focusedField = .textInput
                                 }
-                            }
+                        }
+                    }
                     }
                     .headerProminence(.increased)
-            }
+            }.listStyle(.insetGrouped)
         }
         .toolbar {
             EditButton()
-                }
+        }.environment(\.editMode, $editMode)
         .navigationTitle("List Editor")
     }
 }
