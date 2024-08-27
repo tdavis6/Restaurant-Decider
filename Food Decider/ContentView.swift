@@ -29,7 +29,23 @@ struct restaurant: Identifiable, Codable {
     var name: String = "Restaurant Name"
 }
 
-
+class restaurantStore: ObservableObject {
+    @Published var dinnerRestaurants: [restaurant] = []
+    @Published var lunchRestaurants: [restaurant] = []
+    @Published var breakfastRestaurants: [restaurant] = []
+    @Published var customRestaurants: [restaurant] = []
+    
+    private static func fileURL() throws -> URL {
+        try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            .appendingPathComponent("dinnerRestaurants.data")
+            .appendingPathComponent("lunchRestaurants.data")
+            .appendingPathComponent("breakfastRestaurants.data")
+            .appendingPathComponent("customRestaurants.data")
+    }
+    
+    func load() async throws {
+    }
+}
 
 var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
 
@@ -241,13 +257,13 @@ struct editListsView: View {
                                       onCommit: {
                                           breakfastRestaurants.append(restaurant(name:textInput))
                                           showingBreakfastPopover = false
-                                          textInput = ""
                                       }
                                     ).keyboardType(.default).autocorrectionDisabled()
                                         .focused($focusedField, equals: .textInput)
                                         .listRowSeparator(.hidden)
                                     }.onAppear {
                                         focusedField = .textInput
+                                        textInput = ""
                                 }
                             }
                     }
@@ -276,13 +292,13 @@ struct editListsView: View {
                                   onCommit: {
                                       lunchRestaurants.append(restaurant(name:textInput))
                                       showingLunchPopover = false
-                                      textInput = ""
                                   }
                                 ).keyboardType(.default).autocorrectionDisabled()
                                     .focused($focusedField, equals: .textInput)
                                     .listRowSeparator(.hidden)
                                 }.onAppear {
                                     focusedField = .textInput
+                                    textInput = ""
                             }
                         }
                     }
@@ -311,13 +327,13 @@ struct editListsView: View {
                                   onCommit: {
                                       dinnerRestaurants.append(restaurant(name:textInput))
                                       showingDinnerPopover = false
-                                      textInput = ""
                                   }
                                 ).keyboardType(.default).autocorrectionDisabled()
                                     .focused($focusedField, equals: .textInput)
                                     .listRowSeparator(.hidden)
                                 }.onAppear {
                                     focusedField = .textInput
+                                    textInput = ""
                             }
                         }
                     }
@@ -346,13 +362,13 @@ struct editListsView: View {
                                   onCommit: {
                                       customRestaurants.append(restaurant(name:textInput))
                                       showingCustomPopover = false
-                                      textInput = ""
                                   }
                                 ).keyboardType(.default).autocorrectionDisabled()
                                     .focused($focusedField, equals: .textInput)
                                     .listRowSeparator(.hidden)
                                 }.onAppear {
                                     focusedField = .textInput
+                                    textInput = ""
                                 }
                         }
                     }
