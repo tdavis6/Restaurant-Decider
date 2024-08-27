@@ -29,7 +29,23 @@ struct restaurant: Identifiable, Codable {
     var name: String = "Restaurant Name"
 }
 
-
+class restaurantStore: ObservableObject {
+    @Published var dinnerRestaurants: [restaurant] = []
+    @Published var lunchRestaurants: [restaurant] = []
+    @Published var breakfastRestaurants: [restaurant] = []
+    @Published var customRestaurants: [restaurant] = []
+    
+    private static func fileURL() throws -> URL {
+        try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            .appendingPathComponent("dinnerRestaurants.data")
+            .appendingPathComponent("lunchRestaurants.data")
+            .appendingPathComponent("breakfastRestaurants.data")
+            .appendingPathComponent("customRestaurants.data")
+    }
+    
+    func load() async throws {
+    }
+}
 
 var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
 
@@ -248,6 +264,7 @@ struct editListsView: View {
                                         .listRowSeparator(.hidden)
                                     }.onAppear {
                                         focusedField = .textInput
+                                        textInput = ""
                                 }
                             }
                     }
