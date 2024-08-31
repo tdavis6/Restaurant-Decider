@@ -29,25 +29,27 @@ struct restaurant: Identifiable, Codable {
     var name: String = "Restaurant Name"
 }
 
+@Model
 class restaurantStore: ObservableObject {
-    @Published var dinnerRestaurants: [restaurant] = []
-    @Published var lunchRestaurants: [restaurant] = []
-    @Published var breakfastRestaurants: [restaurant] = []
-    @Published var customRestaurants: [restaurant] = []
+    var dinnerRestaurants: [restaurant] = []
+    var lunchRestaurants: [restaurant] = []
+    var breakfastRestaurants: [restaurant] = []
+    var customRestaurants: [restaurant] = []
     
-    private static func fileURL() throws -> URL {
-        try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("dinnerRestaurants.data")
-            .appendingPathComponent("lunchRestaurants.data")
-            .appendingPathComponent("breakfastRestaurants.data")
-            .appendingPathComponent("customRestaurants.data")
-    }
-    
-    func load() async throws {
+    init(dinnerRestaurants: [restaurant], lunchRestaurants: [restaurant], breakfastRestaurants: [restaurant], customRestaurants: [restaurant]) {
+        self.dinnerRestaurants = dinnerRestaurants
+        self.lunchRestaurants = lunchRestaurants
+        self.breakfastRestaurants = breakfastRestaurants
+        self.customRestaurants = customRestaurants
     }
 }
 
-var colors: [Color] = [.blue, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .yellow, .teal]
+
+func loadLists() {
+    
+}
+
+var colors: [Color] = [.red, .green, .blue, .yellow, .purple, .brown, .cyan, .gray, .indigo, .mint, .orange, .teal]
 
 struct HomePageView: View {
     @State public var dinnerRestaurants: [restaurant] = []
@@ -109,28 +111,20 @@ struct HomePageView: View {
                 Spacer()
                 VStack{
                     AsyncImage(url: URL(string: "N/A")) { phase in
-                                switch phase {
-                                case .failure:
-                                    Image(systemName: "fork.knife")
-                                        .font(.system(size: 250))
-                                        .foregroundColor(colors.randomElement() ?? .blue)
-                                case .success(let image):
-                                    ZStack{
-                                        image
-                                            .resizable()
-                                        Rectangle()
-                                            .foregroundColor(.clear)
-                                            .background(
-                                                LinearGradient(stops: [
-                                                    Gradient.Stop(color: .clear, location: 0.4),
-                                                    Gradient.Stop(color: .black, location: 0.0),
-                                                ], startPoint: .bottom, endPoint: .top)
-                                            )
-                                    }
-                                default:
-                                    ProgressView()
-                                }
+                        switch phase {
+                        case .failure:
+                            Image(systemName: "fork.knife")
+                                .font(.system(size: 250))
+                                .foregroundColor(colors.randomElement() ?? .blue)
+                        case .success(let image):
+                            ZStack{
+                                image
+                                    .resizable()
                             }
+                        default:
+                            ProgressView()
+                        }
+                    }
                     .frame(width: 320, height: 320)
                     .clipShape(.circle)
                     .padding()
@@ -158,7 +152,7 @@ struct HomePageView: View {
                                 randomBreakfast()
                             }
                         }.onAppear(perform: combineArrays)
-                        .buttonStyle(.borderedProminent)
+                            .buttonStyle(.borderedProminent)
                     }
                     if !lunchRestaurants.isEmpty {
                         Button("Lunch") {
@@ -166,7 +160,7 @@ struct HomePageView: View {
                                 randomLunch()
                             }
                         }.onAppear(perform: combineArrays)
-                        .buttonStyle(.borderedProminent)
+                            .buttonStyle(.borderedProminent)
                     }
                     if !dinnerRestaurants.isEmpty {
                         Button("Dinner") {
@@ -174,7 +168,7 @@ struct HomePageView: View {
                                 randomDinner()
                             }
                         }.onAppear(perform: combineArrays)
-                        .buttonStyle(.borderedProminent)
+                            .buttonStyle(.borderedProminent)
                     }
                     if !allRestaurants.isEmpty {
                         Button("Any") {
@@ -390,7 +384,7 @@ struct aboutView: View {
             Text("Build Number: \(getBuildNumber())")
                 .padding()
             Text("[Report an Issue](https://github.com/tdavis6/Restaurant-Decider/issues/new?assignees=tdavis6&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D)")
-                .padding(.top)
+                .padding()
             Text("[Request a Feature](https://github.com/tdavis6/Restaurant-Decider/issues/new?assignees=tdavis6&labels=enhancement&projects=&template=feature_request.md&title=%5BFEATURE%5D)")
                 .padding()
             Text("[GitHub Repository](https://github.com/tdavis6/Restaurant-Decider)")

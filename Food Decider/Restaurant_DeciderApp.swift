@@ -13,5 +13,6 @@ struct Restaurant_DeciderApp: App {
         WindowGroup {
             HomePageView()
         }
+        .modelContainer(for: restaurantStore.self)
     }
 }
