@@ -7,17 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CBDAA6BF2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDAA6BE2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift */; };
-		CBDAA6C12BDDEB3D00A93F6E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBDAA6C02BDDEB3D00A93F6E /* ContentView.swift */; };
+		CB341B072CF925400072A28F /* HomePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB341B042CF924CD0072A28F /* HomePageView.swift */; };
+		CB341B082CF925450072A28F /* EditListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB341B052CF924D80072A28F /* EditListsView.swift */; };
+		CB341B092CF9254A0072A28F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB341B062CF924E00072A28F /* AboutView.swift */; };
+		CB341B0A2CF9254E0072A28F /* Restaurant_DeciderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB341B032CF924B40072A28F /* Restaurant_DeciderApp.swift */; };
+		CB341B0C2CF925990072A28F /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB341B0B2CF925990072A28F /* Models.swift */; };
 		CBDAA6C32BDDEB3E00A93F6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBDAA6C22BDDEB3E00A93F6E /* Assets.xcassets */; };
 		CBDAA6C62BDDEB3E00A93F6E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBDAA6C52BDDEB3E00A93F6E /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		CB2F110F2C52283300FB9C20 /* Food-Decider-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Food-Decider-Info.plist"; sourceTree = SOURCE_ROOT; };
+		CB341B032CF924B40072A28F /* Restaurant_DeciderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant_DeciderApp.swift; sourceTree = "<group>"; };
+		CB341B042CF924CD0072A28F /* HomePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageView.swift; sourceTree = "<group>"; };
+		CB341B052CF924D80072A28F /* EditListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditListsView.swift; sourceTree = "<group>"; };
+		CB341B062CF924E00072A28F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		CB341B0B2CF925990072A28F /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		CB341B0D2CF92C6A0072A28F /* Food Decider.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Food Decider.entitlements"; sourceTree = "<group>"; };
 		CBDAA6BB2BDDEB3D00A93F6E /* Food Decider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Food Decider.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CBDAA6BE2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant_DeciderApp.swift; sourceTree = "<group>"; };
-		CBDAA6C02BDDEB3D00A93F6E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CBDAA6C22BDDEB3E00A93F6E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBDAA6C52BDDEB3E00A93F6E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,11 +59,15 @@
 		CBDAA6BD2BDDEB3D00A93F6E /* Food Decider */ = {
 			isa = PBXGroup;
 			children = (
+				CB341B0D2CF92C6A0072A28F /* Food Decider.entitlements */,
 				CB2F110F2C52283300FB9C20 /* Food-Decider-Info.plist */,
-				CBDAA6BE2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift */,
-				CBDAA6C02BDDEB3D00A93F6E /* ContentView.swift */,
 				CBDAA6C22BDDEB3E00A93F6E /* Assets.xcassets */,
 				CBDAA6C42BDDEB3E00A93F6E /* Preview Content */,
+				CB341B032CF924B40072A28F /* Restaurant_DeciderApp.swift */,
+				CB341B042CF924CD0072A28F /* HomePageView.swift */,
+				CB341B0B2CF925990072A28F /* Models.swift */,
+				CB341B052CF924D80072A28F /* EditListsView.swift */,
+				CB341B062CF924E00072A28F /* AboutView.swift */,
 			);
 			path = "Food Decider";
 			sourceTree = "<group>";
@@ -139,8 +150,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBDAA6C12BDDEB3D00A93F6E /* ContentView.swift in Sources */,
-				CBDAA6BF2BDDEB3D00A93F6E /* Restaurant_DeciderApp.swift in Sources */,
+				CB341B0C2CF925990072A28F /* Models.swift in Sources */,
+				CB341B082CF925450072A28F /* EditListsView.swift in Sources */,
+				CB341B092CF9254A0072A28F /* AboutView.swift in Sources */,
+				CB341B072CF925400072A28F /* HomePageView.swift in Sources */,
+				CB341B0A2CF9254E0072A28F /* Restaurant_DeciderApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,9 +287,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Food Decider/Food Decider.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Food Decider/Preview Content\"";
 				DEVELOPMENT_TEAM = QLHMS7XY58;
 				ENABLE_PREVIEWS = YES;
@@ -293,7 +308,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.tylerdavis.Food-Decider";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -314,9 +329,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Food Decider/Food Decider.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Food Decider/Preview Content\"";
 				DEVELOPMENT_TEAM = QLHMS7XY58;
 				ENABLE_PREVIEWS = YES;
@@ -334,7 +350,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "net.tylerdavis.Food-Decider";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

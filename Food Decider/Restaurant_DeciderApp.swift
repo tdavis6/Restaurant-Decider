@@ -2,11 +2,11 @@ import SwiftUI
 import SwiftData
 
 @main
-struct Restaurant_DeciderApp: App {
+struct RestaurantDeciderApp: App {
     var body: some Scene {
         WindowGroup {
             HomePageView()
-                .modelContainer(for: Restaurant.self)
         }
+        .modelContainer(for: Restaurant.self)
     }
 }

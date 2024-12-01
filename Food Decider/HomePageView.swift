@@ -1,11 +1,3 @@
-//
-//  HomePageView.swift
-//  Food Decider
-//
-//  Created by Tyler Davis on 11/28/24.
-//
-
-
 import SwiftUI
 import SwiftData
 
@@ -16,8 +8,14 @@ struct HomePageView: View {
     @State private var selectedRestaurant: Restaurant?
     @State private var id = 0
 
+    private let colors: [Color] = [.red, .green, .blue, .yellow, .purple, .brown, .cyan, .gray, .indigo, .mint, .orange, .teal]
+
     func randomRestaurant(for meal: MealType) -> Restaurant? {
         return restaurants.filter { $0.meal == meal }.randomElement()
+    }
+
+    func randomAnyRestaurant() -> Restaurant? {
+        return restaurants.randomElement()
     }
 
     var body: some View {
@@ -28,16 +26,21 @@ struct HomePageView: View {
 
                 Spacer()
 
+                // Logo or fallback
                 VStack {
-                    Image(systemName: "fork.knife")
-                        .font(.system(size: 150))
-                        .foregroundColor(.blue)
+                    if let restaurant = selectedRestaurant {
+                        dynamicLogoView(for: restaurant)
+                    } else {
+                        fallbackSymbolView()
+                    }
+
                     Text(selectedRestaurant?.name ?? "Choose a button below!")
                         .font(.title)
                 }
                 .id(id)
                 .padding()
 
+                // Directions Button
                 HStack {
                     Button("Directions") {
                         openDirections()
@@ -49,6 +52,7 @@ struct HomePageView: View {
 
                 Spacer()
 
+                // Meal Buttons and "Any" Button
                 HStack {
                     ForEach(MealType.allCases) { meal in
                         if restaurants.contains(where: { $0.meal == meal }) {
@@ -60,6 +64,16 @@ struct HomePageView: View {
                             }
                             .buttonStyle(.borderedProminent)
                         }
+                    }
+
+                    if !restaurants.isEmpty {
+                        Button("Any") {
+                            withAnimation {
+                                selectedRestaurant = randomAnyRestaurant()
+                                id += 1
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
                     }
                 }
 
@@ -81,13 +95,41 @@ struct HomePageView: View {
         }
     }
 
-    // MARK: - Open Directions
     private func openDirections() {
         guard let selected = selectedRestaurant,
               let encodedName = selected.name.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "maps://?q=\(encodedName)") else { return }
 
         UIApplication.shared.open(url)
+    }
+
+    // Dynamic logo view: initials inside a circle
+    @ViewBuilder
+    private func dynamicLogoView(for restaurant: Restaurant) -> some View {
+        ZStack {
+            Circle()
+                .fill(colors.randomElement() ?? .blue)
+                .frame(width: 150, height: 150)
+            Text(initials(for: restaurant.name))
+                .font(.largeTitle)
+                .bold()
+                .foregroundColor(.white)
+        }
+        .shadow(radius: 10)
+    }
+
+    // Fallback SF Symbol View
+    @ViewBuilder
+    private func fallbackSymbolView() -> some View {
+        Image(systemName: "fork.knife")
+            .font(.system(size: 150))
+            .foregroundColor(colors.randomElement() ?? .blue)
+    }
+
+    // Extract initials from a name
+    private func initials(for name: String) -> String {
+        let components = name.split(separator: " ").map { String($0.prefix(1)) }
+        return components.prefix(2).joined()
     }
 }
 

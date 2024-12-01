@@ -1,12 +1,5 @@
-//
-//  Restaurant.swift
-//  Food Decider
-//
-//  Created by Tyler Davis on 11/28/24.
-//
-
-
 import SwiftData
+import Foundation
 
 @Model
 class Restaurant: Identifiable {
