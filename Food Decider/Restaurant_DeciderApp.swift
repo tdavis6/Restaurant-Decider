@@ -1,18 +1,12 @@
-//
-//  Restaurant_DeciderApp.swift
-//  Restaurant Decider
-//
-//  Created by Tyler Davis on 4/27/24.
-//
-
 import SwiftUI
+import SwiftData
 
 @main
 struct Restaurant_DeciderApp: App {
     var body: some Scene {
         WindowGroup {
             HomePageView()
+                .modelContainer(for: Restaurant.self)
         }
-        .modelContainer(for: restaurantStore.self)
     }
 }
